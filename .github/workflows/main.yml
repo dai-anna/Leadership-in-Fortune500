@@ -24,17 +24,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      
+      - name: install dependencies
+        run: pip install -r requirements.txt
 
-      # Runs a single command using the runners shell
-      - name: mainscraper cookies
-        with: # Set Azure credentials secret as an input
-          COOKIES_MAIN: ${{ secrets.COOKIES_DETAILS }}
-        env: # Or as an environment variable
-          COOKIES_MAIN: ${{ secrets.COOKIES_DETAILS }}
-
-      # Set up cookies 
-      - name: url scraper cookies
-        with: # Set Azure credentials secret as an input
-          COOKIES_URL: ${{ secrets.COOKIES_URL }}
-        env: # Or as an environment variable
-          COOKIES_URL: ${{ secrets.COOKIES_URL }}
