@@ -1,6 +1,7 @@
 # Added
 *.DS_Store
 personal.py
+trash.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

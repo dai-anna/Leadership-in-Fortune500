@@ -17,8 +17,12 @@ if MAINSCRAPER:
 
     params = personal.main_params
 
-    response = requests.get('https://fortune.com/wp-json/irving/v1/data/franchise-search-results', headers=headers, params=params, cookies=cookies)
-
+    response = requests.get(
+        "https://fortune.com/wp-json/irving/v1/data/franchise-search-results",
+        headers=headers,
+        params=params,
+        cookies=cookies,
+    )
 
     main_site = response.json()
 
@@ -30,8 +34,9 @@ if MAINSCRAPER:
 
 #%%
 # To load from disk
+
 with open("initial_scrape.json", "r") as f:
-        main_site = json.load(f)
+    main_site = json.load(f)
 
 #%%
 headers_dict = main_site[0]
@@ -96,8 +101,8 @@ if VIEWINJSON:
     with open("dump.json", "w") as f:
         json.dump(data_list, f)
 
-
-with open("dump.json", "r") as f:
+if VIEWINJSON:
+    with open("dump.json", "r") as f:
         hihi = json.load(f)
 
 #%%
@@ -109,8 +114,6 @@ for company in data_list:
     company_data = {line["key"]: line["value"] for line in data}
     company_data["permalink"] = company["permalink"]
     companies.append(company_data)
-
-companies
 
 #%%
 # To save my cleaned company data as a dataframe
@@ -153,10 +156,66 @@ company_df[convert_to_int] = company_df[convert_to_int].astype("int")
 company_df[convert_to_float] = company_df[convert_to_float].astype("float")
 # company_df.loc["revchange", "prftchange"] = company_df.loc["revchange", "prftchange"]/100
 company_df.sample(10)
+# %%
+# To rename companies with no ticker symbol
+# name_ticker_dict = {
+#     'CHS': 'CHSCO',
+#     'Northwestern Mutual':'NWE',
+#     'USAA':'',
+#     'TIAA':'',
+#     'Nationwide':'',
+#     'Liberty Mutual Insurance Group':'',
+#     'Publix Super Markets':'',
+#     'New York Life Insurance':'',
+#     'State Farm Insurance':'',
+#     'CoreLogic':'',
+#     'Teledyne FLIR':'',
+#     'Perspecta':'',
+#     'Ohio National Mutual':'',
+#     'TCF Financial':'',
+#     'Federated Mutual Insurance':'',
+#     'Knights of Columbus':'',
+#     'Country Financial':'',
+#     'NLV Financial':'',
+#     'Univision Communications':'',
+#     'Cooper Tire & Rubber':'',
+#     'Amica Mutual Insurance':'',
+#     'Hexion':'',
+#     'PRA Health Sciences':'',
+#     'Puget Energy':'',
+#     'Sentry Insurance Group':'',
+#     'Medical Mutual of Ohio':'',
+#     'Penn Mutual Life Insurance':'',
+#     'CUNA Mutual Group':'',
+#     'Alexion Pharmaceuticals':'',
+#     'Securian Financial Group':'',
+#     'FM Global':'',
+#     'Graybar Electric':'',
+#     'Navistar International':'',
+#     'Western & Southern Financial Group':'',
+#     'Thrivent Financial for Lutherans':'',
+#     'Auto-Owners Insurance':'',
+#     'Erie Insurance Group':'',
+#     'Pacific Life':'',
+#     'Jones Financial (Edward Jones)':'',
+#     'Mutual of Omaha Insurance':'',
+#     'Farmers Insurance Exchange':'',
+#     'Peter Kiewit Sons&#8217;':'',
+#     'Core-Mark Holding':'',
+#     'Guardian Life Ins. Co. of America':'',
+#     'American Family Insurance Group':'',
+#     'Land O&#8217;Lakes':'',
+#     'Massachusetts Mutual Life Insurance:'',
+# }
+# %%
+# To remove companies with no ticker symbol
+company_df_public = company_df[company_df["ticker"].notnull()]
+company_df_public = company_df_public.drop(["_merge"], axis=1)# company_df_public = 
 
 #%%
 # Creating a database in sqlite
 conn = sqlite3.connect("fortune500.sqlite")
-company_df.to_sql(name="companies", con=conn, index=True, if_exists="replace")
+company_df_public.to_sql(name="publiccompanies", con=conn, index=True, if_exists="replace")
+
 
 # %%

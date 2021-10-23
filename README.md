@@ -15,3 +15,9 @@ $ pip install -r requirements.txt
 
 2. Launch the main Fortune site with Inspector open and curl the link with the key data
 
+
+...
+
+### Sources of data
+[Fortune.com](https://fortune.com/fortune500/2021/search/)
+[SEC Ticker to CIK](https://www.sec.gov/os/accessing-edgar-data)
