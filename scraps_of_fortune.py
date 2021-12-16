@@ -4,18 +4,17 @@ import pandas as pd
 import sqlite3
 import re
 import json
-import personal
-
+import os
 
 #%%
 # To scrape Fortune 500 for full list of companies
 MAINSCRAPER = False
 if MAINSCRAPER:
-    cookies = personal.main_cookies
+    cookies = os.environ.get('MAIN_COOKIES')
 
-    headers = personal.main_headers
+    headers = os.environ.get('MAIN_HEADERS')
 
-    params = personal.main_params
+    params = os.environ.get('MAIN_PARAMS')
 
     response = requests.get(
         "https://fortune.com/wp-json/irving/v1/data/franchise-search-results",
